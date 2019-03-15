@@ -1,0 +1,13 @@
+plugins {
+	id 'application'
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+
+}
+
+mainClassName = 'Main'
