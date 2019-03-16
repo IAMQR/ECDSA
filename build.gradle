@@ -1,13 +1,15 @@
 plugins {
 	id 'application'
+	id 'org.openjfx.javafxplugin' version '0.0.7'
+}
+
+javafx {
+	version = '11.0.2'
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
 repositories {
-	mavenCentral()
+	jcenter()
 }
 
-dependencies {
-
-}
-
-mainClassName = 'Main'
+mainClassName = 'com.demianko.ecdsa.Main'
