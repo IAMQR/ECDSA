@@ -1,7 +1,6 @@
 package com.demianko.ecdsa.controllers;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.nio.file.FileAlreadyExistsException;
 import java.util.ResourceBundle;
@@ -11,10 +10,7 @@ import com.demianko.ecdsa.logic.Stubs;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
@@ -28,6 +24,10 @@ import javafx.stage.Window;
 public class MainUIController implements Initializable {
 
 	private Stage keyGenStage; // Stage of the keyGen window
+
+	public void setKeyGenStage(Stage keyGenStage) {
+		this.keyGenStage = keyGenStage;
+	}
 
 	// ELEMENTS
 
@@ -228,23 +228,6 @@ public class MainUIController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		defaultStatusMessageLabelStyle = statusMessageLabel.getStyle(); // Remember the default status message style
-
-		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("ui_keygen.fxml"));
-
-		Parent keyGenParent = null;
-		try {
-			keyGenParent = fxmlLoader.load(); // Load the keyGen window layout
-		} catch (IOException e) {
-			System.exit(1); // Exit if layout failed to load
-		}
-
-		fxmlLoader.<KeyGenUIController>getController().setMainUIController(this); // Load controller
-
-		Scene scene = new Scene(keyGenParent);
-		keyGenStage = new Stage();
-		keyGenStage.initOwner(thisWindow);
-		keyGenStage.setTitle("Key generation menu");
-		keyGenStage.setScene(scene);
 
 		// Finish initialisation by providing status
 		statusMessageLabel.setText("Ready");
