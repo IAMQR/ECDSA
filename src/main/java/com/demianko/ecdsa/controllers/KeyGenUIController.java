@@ -1,29 +1,34 @@
 package com.demianko.ecdsa.controllers;
 
 import java.io.File;
+import java.net.URL;
 import java.nio.file.FileAlreadyExistsException;
+import java.util.ResourceBundle;
 
+import com.demianko.ecdsa.Main;
+import com.demianko.ecdsa.logic.ECurve;
 import com.demianko.ecdsa.logic.Stubs;
 
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
 
-public class KeyGenUIController {
+public class KeyGenUIController implements Initializable {
 
 	private MainUIController mainUIController; // Parent controller
 
-	void setMainUIController(MainUIController mainUIController) {
+	public void setMainUIController(MainUIController mainUIController) {
 		this.mainUIController = mainUIController;
 	}
 
 	// ELEMENTS
 
 	@FXML
-	private ComboBox<?> curveSelectionComboBox;
+	private ComboBox<ECurve> curveSelectionComboBox;
 
 	@FXML
 	private TextField keyOutputDirectoryLocationField;
@@ -64,10 +69,16 @@ public class KeyGenUIController {
 	@FXML
 	private void handleClickOnKeyGenButton(MouseEvent mouseEvent) {
 		try {
-			Stubs.generateKeys("", privateKey, publicKey); // Stub
+			Stubs.generateKeys(curveSelectionComboBox.getValue(), privateKey, publicKey); // Stub
 			mainUIController.setLabelTextSuccess("Keys were succesfully generated!");
 		} catch (Exception e) {
 			mainUIController.setLabelTextFailure(e.getMessage());
 		}
+	}
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		// Add curves
+		curveSelectionComboBox.getItems().addAll(Main.CURVES.values());
 	}
 }

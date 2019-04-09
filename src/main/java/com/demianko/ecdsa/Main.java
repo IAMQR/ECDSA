@@ -1,7 +1,12 @@
 package com.demianko.ecdsa;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.demianko.ecdsa.controllers.KeyGenUIController;
 import com.demianko.ecdsa.controllers.MainUIController;
+import com.demianko.ecdsa.logic.ECurve;
+import com.demianko.ecdsa.logic.curves.P192;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +15,15 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+
+	public static final Map<String, ECurve> CURVES;
+
+	// Add curves here, key should be the same as the curve name in its constructor
+	static {
+		CURVES = new HashMap<>();
+		ECurve curve = new P192();
+		CURVES.put(curve.toString(), curve);
+	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {

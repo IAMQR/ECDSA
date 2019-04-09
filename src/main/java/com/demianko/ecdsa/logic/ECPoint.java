@@ -18,11 +18,9 @@ public class ECPoint {
 	public boolean equals(Object pt) {
 		if (!(pt instanceof ECPoint)) {
 			return false;
-		} else if (this.x.equals(((ECPoint) pt).getX()) && this.y.equals(((ECPoint) pt).getY())) {
-			return true;
-		} else {
-			return false;
 		}
+
+		return x.equals(((ECPoint) pt).getX()) && y.equals(((ECPoint) pt).getY());
 	}
 
 	public BigInteger getX() {

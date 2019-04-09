@@ -122,7 +122,7 @@ public class MainUIController implements Initializable {
 		} else if (eventSource == signatureOutputBrowseButton) {
 			signature = fileChooser.showSaveDialog(thisWindow);
 			if (signature != null) {
-				signatureFileLocationField.setText(signature.getAbsolutePath());
+				signatureOutputLocationField.setText(signature.getAbsolutePath());
 			}
 		} else if (eventSource == fileToVerifyBrowseButton) {
 			fileToVerify = fileChooser.showOpenDialog(thisWindow);
@@ -166,13 +166,12 @@ public class MainUIController implements Initializable {
 			if (signatureOutputLocationField.getText().compareTo("") == 0) {
 				// Default output filename = fileToSign.getName() + ".signature"
 				File tempFile = new File(System.getProperty("user.dir"), fileToSign.getName() + ".signature");
-				if (tempFile.exists()) {
-					throw new FileAlreadyExistsException(tempFile.getCanonicalPath()); // Throw if default output file
-																						// already exists
+				if (tempFile.exists()) { // Throw if default output file already exists
+					throw new FileAlreadyExistsException(
+							"File " + tempFile.getCanonicalPath() + " already exists, choose a different one");
 				}
 				signatureOutputLocationField.setText(tempFile.getAbsolutePath());
 			}
-
 			signature = new File(signatureOutputLocationField.getText());
 
 			Stubs.sign(fileToSign, privateKey, signature); // Stub
