@@ -1,4 +1,4 @@
-package com.demianko.ecdsa.logic;
+package com.demianko.ecdsa.curves;
 
 import java.math.BigInteger;
 

@@ -1,4 +1,4 @@
-package com.demianko.ecdsa.logic;
+package com.demianko.ecdsa.operations;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,7 +12,8 @@ import java.security.MessageDigest;
 import java.security.SecureRandom;
 
 import com.demianko.ecdsa.Main;
-import com.demianko.ecdsa.logic.math.Operations;
+import com.demianko.ecdsa.curves.ECPoint;
+import com.demianko.ecdsa.curves.ECurve;
 
 // Temporary class
 

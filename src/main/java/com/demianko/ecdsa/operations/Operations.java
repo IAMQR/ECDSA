@@ -1,9 +1,9 @@
-package com.demianko.ecdsa.logic.math;
+package com.demianko.ecdsa.operations;
 
 import java.math.BigInteger;
 
-import com.demianko.ecdsa.logic.ECPoint;
-import com.demianko.ecdsa.logic.ECurve;
+import com.demianko.ecdsa.curves.ECPoint;
+import com.demianko.ecdsa.curves.ECurve;
 
 public class Operations {
 	private Operations() {

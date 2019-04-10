@@ -6,8 +6,8 @@ import java.nio.file.FileAlreadyExistsException;
 import java.util.ResourceBundle;
 
 import com.demianko.ecdsa.Main;
-import com.demianko.ecdsa.logic.ECurve;
-import com.demianko.ecdsa.logic.Stubs;
+import com.demianko.ecdsa.operations.Stubs;
+import com.demianko.ecdsa.curves.ECurve;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

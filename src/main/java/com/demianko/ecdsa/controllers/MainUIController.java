@@ -5,8 +5,7 @@ import java.net.URL;
 import java.nio.file.FileAlreadyExistsException;
 import java.util.ResourceBundle;
 
-import com.demianko.ecdsa.controllers.util.Utility;
-import com.demianko.ecdsa.logic.Stubs;
+import com.demianko.ecdsa.operations.Stubs;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -158,9 +157,9 @@ public class MainUIController implements Initializable {
 	private void handleClickOnSignButton(MouseEvent mouseEvent) {
 		try {
 			// Load the file to sign from the specified path
-			fileToSign = Utility.loadIfExistsAndIsFile(fileToSignLocationField.getText(), "File to sign");
+			fileToSign = new File(fileToSignLocationField.getText());
 			// Load the private key from the specified path
-			privateKey = Utility.loadIfExistsAndIsFile(privateKeyLocationField.getText(), "Private key");
+			privateKey = new File(privateKeyLocationField.getText());
 
 			// If not specified, set to the current working directory path
 			if (signatureOutputLocationField.getText().compareTo("") == 0) {
@@ -185,11 +184,11 @@ public class MainUIController implements Initializable {
 	private void handleClickOnVerifyButton(MouseEvent mouseEvent) {
 		try {
 			// Load the file to verify from the specified path
-			fileToVerify = Utility.loadIfExistsAndIsFile(fileToVerifyLocationField.getText(), "File to verify");
+			fileToVerify = new File(fileToVerifyLocationField.getText());
 			// Load the public key from the specified path
-			publicKey = Utility.loadIfExistsAndIsFile(publicKeyLocationField.getText(), "Public key");
+			publicKey = new File(publicKeyLocationField.getText());
 			// Load the signature from the specified path
-			signature = Utility.loadIfExistsAndIsFile(signatureFileLocationField.getText(), "Signature file");
+			signature = new File(signatureFileLocationField.getText());
 
 			Stubs.verify(fileToVerify, publicKey, signature); // Stub
 			setLabelTextSuccess(String.format("File %s was successfully verified!", fileToSign.getName()));
