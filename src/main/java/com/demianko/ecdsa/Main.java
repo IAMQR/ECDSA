@@ -20,21 +20,24 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-	public static final Map<String, ECurve> CURVES;
+	private static Map<String, ECurve> curves = new LinkedHashMap<>();
 
+	public static Map<String, ECurve> getCurves() {
+		return curves;
+	}
+	
 	// Add curves here, key should be the same as the curve name in its constructor
 	static {
-		CURVES = new LinkedHashMap<>();
 		ECurve curve = new P192();
-		CURVES.put(curve.toString(), curve);
+		curves.put(curve.toString(), curve);
 		curve = new P224();
-		CURVES.put(curve.toString(), curve);
+		curves.put(curve.toString(), curve);
 		curve = new P256();
-		CURVES.put(curve.toString(), curve);
+		curves.put(curve.toString(), curve);
 		curve = new P384();
-		CURVES.put(curve.toString(), curve);
+		curves.put(curve.toString(), curve);
 		curve = new P521();
-		CURVES.put(curve.toString(), curve);
+		curves.put(curve.toString(), curve);
 	}
 
 	@Override
@@ -54,6 +57,7 @@ public class Main extends Application {
 		Stage keyGenStage = new Stage();
 		keyGenStage.setScene(keyGenScene);
 
+		mainWindowLoader.<MainUIController>getController().setThisWindow(primaryStage);
 		// Set keyGen stage in the main controller
 		mainWindowLoader.<MainUIController>getController().setKeyGenStage(keyGenStage);
 		// Set a reference to the main controller in the keyGen one

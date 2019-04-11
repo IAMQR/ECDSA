@@ -3,13 +3,13 @@ package com.demianko.ecdsa.curves;
 import java.math.BigInteger;
 
 public abstract class ECurve {
-	private final String name;
+	private String name;
 
-	private final BigInteger p; // Field size
-	private final BigInteger a; // Coefficient a
-	private final BigInteger b; // Coefficient b
-	private final ECPoint g; // Starting point
-	private final BigInteger n; // Order of g
+	private BigInteger p; // Field size
+	private BigInteger a; // Coefficient a
+	private BigInteger b; // Coefficient b
+	private ECPoint g; // Starting point
+	private BigInteger n; // Order of g
 
 	protected ECurve(String name, BigInteger p, BigInteger a, BigInteger b, ECPoint g, BigInteger n) {
 		this.name = name;

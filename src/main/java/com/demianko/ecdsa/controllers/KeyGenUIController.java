@@ -6,8 +6,11 @@ import java.nio.file.FileAlreadyExistsException;
 import java.util.ResourceBundle;
 
 import com.demianko.ecdsa.Main;
-import com.demianko.ecdsa.operations.Stubs;
+import com.demianko.ecdsa.operations.FileOperations;
 import com.demianko.ecdsa.curves.ECurve;
+import com.demianko.ecdsa.keys.ECPrivateKey;
+import com.demianko.ecdsa.keys.ECPublicKey;
+import com.demianko.ecdsa.keys.KeyFactory;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -40,8 +43,8 @@ public class KeyGenUIController implements Initializable {
 
 	// FILES TO WORK WITH
 
-	private File privateKey;
-	private File publicKey;
+	private File privateKeyFile;
+	private File publicKeyFile;
 
 	// HANDLERS
 
@@ -50,11 +53,11 @@ public class KeyGenUIController implements Initializable {
 		DirectoryChooser directoryChooser = new DirectoryChooser();
 		File directory = directoryChooser.showDialog(keyOutputDirectoryBrowseButton.getScene().getWindow());
 
-		privateKey = new File(directory.getAbsolutePath(), "pkey");
-		publicKey = new File(directory.getAbsolutePath(), "pubkey");
+		privateKeyFile = new File(directory.getAbsolutePath(), "pkey");
+		publicKeyFile = new File(directory.getAbsolutePath(), "pubkey");
 
 		try {
-			if (privateKey.exists() || publicKey.exists()) {
+			if (privateKeyFile.exists() || publicKeyFile.exists()) {
 				throw new FileAlreadyExistsException(
 						"\"pkey\" or/and \"pubkey\" already exist! Choose a different directory");
 			}
@@ -69,7 +72,13 @@ public class KeyGenUIController implements Initializable {
 	@FXML
 	private void handleClickOnKeyGenButton(MouseEvent mouseEvent) {
 		try {
-			Stubs.generateKeys(curveSelectionComboBox.getValue(), privateKey, publicKey); // Stub
+			ECurve curve = curveSelectionComboBox.getValue();
+			KeyFactory keyFactory = new KeyFactory(curve);
+			ECPrivateKey privateKey = keyFactory.generatePrivateKey();
+			ECPublicKey publicKey = keyFactory.generatePublicKey(privateKey);
+
+			FileOperations.writePrivateKey(privateKey, privateKeyFile);
+			FileOperations.writePublicKey(publicKey, publicKeyFile);
 			mainUIController.setLabelTextSuccess("Keys were succesfully generated!");
 		} catch (Exception e) {
 			mainUIController.setLabelTextFailure(e.getMessage());
@@ -79,6 +88,6 @@ public class KeyGenUIController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// Add curves
-		curveSelectionComboBox.getItems().addAll(Main.CURVES.values());
+		curveSelectionComboBox.getItems().addAll(Main.getCurves().values());
 	}
 }

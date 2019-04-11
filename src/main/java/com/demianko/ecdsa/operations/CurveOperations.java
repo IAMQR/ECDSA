@@ -5,8 +5,8 @@ import java.math.BigInteger;
 import com.demianko.ecdsa.curves.ECPoint;
 import com.demianko.ecdsa.curves.ECurve;
 
-public class Operations {
-	private Operations() {
+public class CurveOperations {
+	private CurveOperations() {
 	}
 
 	// Addition
