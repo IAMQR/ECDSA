@@ -7,8 +7,9 @@ import com.demianko.ecdsa.curves.ECurve;
 import com.demianko.ecdsa.operations.CurveOperations;
 
 public class KeyFactory {
+	
 	private SecureRandom secureRandom;
-
+	
 	private ECurve curve;
 
 	public KeyFactory(ECurve curve, byte[] seed) {
@@ -29,7 +30,7 @@ public class KeyFactory {
 	}
 
 	public ECPublicKey generatePublicKey(ECPrivateKey privateKey) {
-		return new ECPublicKey(curve, CurveOperations.multPoint(curve, privateKey.getData(), curve.getG()));
+		return new ECPublicKey(curve, CurveOperations.multiplyPoint(curve, privateKey.getData(), curve.getG()));
 	}
 
 	public ECurve getCurve() {

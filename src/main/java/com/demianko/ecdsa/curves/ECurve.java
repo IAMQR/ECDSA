@@ -3,6 +3,7 @@ package com.demianko.ecdsa.curves;
 import java.math.BigInteger;
 
 public abstract class ECurve {
+	
 	private String name;
 
 	private BigInteger p; // Field size

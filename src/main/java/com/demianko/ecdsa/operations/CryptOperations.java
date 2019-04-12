@@ -28,7 +28,7 @@ public class CryptOperations {
 		} while ((k.compareTo(BigInteger.ZERO) == 0)
 				|| (k.gcd(privateKey.getCurve().getN()).compareTo(BigInteger.ONE) != 0));
 
-		ECPoint kG = CurveOperations.multPoint(privateKey.getCurve(), k, privateKey.getCurve().getG());
+		ECPoint kG = CurveOperations.multiplyPoint(privateKey.getCurve(), k, privateKey.getCurve().getG());
 		BigInteger r = kG.getX().mod(privateKey.getCurve().getN());
 		if (r.equals(BigInteger.ZERO)) {
 			signFile(fileToSign, privateKeyFile, signatureOutputFile); // Try again
@@ -65,8 +65,8 @@ public class CryptOperations {
 		BigInteger u2 = signature[0].multiply(w).mod(publicKey.getCurve().getN());
 
 		ECPoint x = CurveOperations.addPoints(publicKey.getCurve(),
-				CurveOperations.multPoint(publicKey.getCurve(), u1, publicKey.getCurve().getG()),
-				CurveOperations.multPoint(publicKey.getCurve(), u2, publicKey.getData()));
+				CurveOperations.multiplyPoint(publicKey.getCurve(), u1, publicKey.getCurve().getG()),
+				CurveOperations.multiplyPoint(publicKey.getCurve(), u2, publicKey.getData()));
 		if (x.isInfinity()) {
 			return false;
 		}

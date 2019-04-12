@@ -3,14 +3,19 @@ package com.demianko.ecdsa.curves;
 import java.math.BigInteger;
 
 public class ECPoint {
-
+	
 	private BigInteger x;
 	private BigInteger y;
 	private boolean infinity;
 
-	public ECPoint(BigInteger xPos, BigInteger yPos) {
-		x = xPos;
-		y = yPos;
+	public ECPoint(boolean infinity) {
+		this(BigInteger.ZERO, BigInteger.ZERO);
+		this.infinity = infinity;
+	}
+
+	public ECPoint(BigInteger x, BigInteger y) {
+		this.x = x;
+		this.y = y;
 		infinity = false;
 	}
 
@@ -20,7 +25,8 @@ public class ECPoint {
 			return false;
 		}
 
-		return x.equals(((ECPoint) pt).getX()) && y.equals(((ECPoint) pt).getY());
+		return x.equals(((ECPoint) pt).getX()) && y.equals(((ECPoint) pt).getY())
+				&& infinity == ((ECPoint) pt).infinity;
 	}
 
 	public BigInteger getX() {

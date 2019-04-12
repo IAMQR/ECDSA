@@ -21,7 +21,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 public class MainUIController implements Initializable {
-
+	
 	private Stage keyGenStage; // Stage of the keyGen window
 
 	public void setKeyGenStage(Stage keyGenStage) {
@@ -93,15 +93,6 @@ public class MainUIController implements Initializable {
 	private Label statusMessageLabel;
 	private String defaultStatusMessageLabelStyle;
 
-	// FILES TO WORK WITH
-
-	private File fileToSign;
-	private File privateKeyFile;
-	private File signatureFile;
-
-	private File fileToVerify;
-	private File publicKeyFile;
-
 	// HANDLERS
 
 	@FXML
@@ -110,36 +101,21 @@ public class MainUIController implements Initializable {
 		FileChooser fileChooser = new FileChooser();
 
 		// Set the corresponding TextField
-		if (eventSource == fileToSignBrowseButton) {
-			fileToSign = fileChooser.showOpenDialog(thisWindow);
-			if (fileToSign != null) {
-				fileToSignLocationField.setText(fileToSign.getAbsolutePath());
+		try {
+			if (eventSource == fileToSignBrowseButton) {
+				fileToSignLocationField.setText(fileChooser.showOpenDialog(thisWindow).getAbsolutePath());
+			} else if (eventSource == privateKeyBrowseButton) {
+				privateKeyLocationField.setText(fileChooser.showOpenDialog(thisWindow).getAbsolutePath());
+			} else if (eventSource == signatureOutputBrowseButton) {
+				signatureOutputLocationField.setText(fileChooser.showSaveDialog(thisWindow).getAbsolutePath());
+			} else if (eventSource == fileToVerifyBrowseButton) {
+				fileToVerifyLocationField.setText(fileChooser.showOpenDialog(thisWindow).getAbsolutePath());
+			} else if (eventSource == publicKeyBrowseButton) {
+				publicKeyLocationField.setText(fileChooser.showOpenDialog(thisWindow).getAbsolutePath());
+			} else if (eventSource == signatureFileBrowseButton) {
+				signatureFileLocationField.setText(fileChooser.showOpenDialog(thisWindow).getAbsolutePath());
 			}
-		} else if (eventSource == privateKeyBrowseButton) {
-			privateKeyFile = fileChooser.showOpenDialog(thisWindow);
-			if (privateKeyFile != null) {
-				privateKeyLocationField.setText(privateKeyFile.getAbsolutePath());
-			}
-		} else if (eventSource == signatureOutputBrowseButton) {
-			signatureFile = fileChooser.showSaveDialog(thisWindow);
-			if (signatureFile != null) {
-				signatureOutputLocationField.setText(signatureFile.getAbsolutePath());
-			}
-		} else if (eventSource == fileToVerifyBrowseButton) {
-			fileToVerify = fileChooser.showOpenDialog(thisWindow);
-			if (fileToVerify != null) {
-				fileToVerifyLocationField.setText(fileToVerify.getAbsolutePath());
-			}
-		} else if (eventSource == publicKeyBrowseButton) {
-			publicKeyFile = fileChooser.showOpenDialog(thisWindow);
-			if (publicKeyFile != null) {
-				publicKeyLocationField.setText(publicKeyFile.getAbsolutePath());
-			}
-		} else if (eventSource == signatureFileBrowseButton) {
-			signatureFile = fileChooser.showOpenDialog(thisWindow);
-			if (signatureFile != null) {
-				signatureFileLocationField.setText(signatureFile.getAbsolutePath());
-			}
+		} catch (NullPointerException e) { // Do nothing if user doesn't choose a file
 		}
 	}
 
@@ -157,9 +133,9 @@ public class MainUIController implements Initializable {
 	private void handleClickOnSignButton(MouseEvent mouseEvent) {
 		try {
 			// Load the file to sign from the specified path
-			fileToSign = new File(fileToSignLocationField.getText());
+			File fileToSign = new File(fileToSignLocationField.getText());
 			// Load the private key from the specified path
-			privateKeyFile = new File(privateKeyLocationField.getText());
+			File privateKeyFile = new File(privateKeyLocationField.getText());
 
 			// If not specified, set to the current working directory path
 			if (signatureOutputLocationField.getText().compareTo("") == 0) {
@@ -171,7 +147,7 @@ public class MainUIController implements Initializable {
 				}
 				signatureOutputLocationField.setText(tempFile.getAbsolutePath());
 			}
-			signatureFile = new File(signatureOutputLocationField.getText());
+			File signatureFile = new File(signatureOutputLocationField.getText());
 
 			CryptOperations.signFile(fileToSign, privateKeyFile, signatureFile);
 			setLabelTextSuccess(String.format("File %s was successfully signed!", fileToSign.getName()));
@@ -184,11 +160,11 @@ public class MainUIController implements Initializable {
 	private void handleClickOnVerifyButton(MouseEvent mouseEvent) {
 		try {
 			// Load the file to verify from the specified path
-			fileToVerify = new File(fileToVerifyLocationField.getText());
+			File fileToVerify = new File(fileToVerifyLocationField.getText());
 			// Load the public key from the specified path
-			publicKeyFile = new File(publicKeyLocationField.getText());
+			File publicKeyFile = new File(publicKeyLocationField.getText());
 			// Load the signature from the specified path
-			signatureFile = new File(signatureFileLocationField.getText());
+			File signatureFile = new File(signatureFileLocationField.getText());
 
 			if (CryptOperations.verifyFile(fileToVerify, publicKeyFile, signatureFile)) {
 				setLabelTextSuccess(String.format("File %s was successfully verified!", fileToVerify.getName()));

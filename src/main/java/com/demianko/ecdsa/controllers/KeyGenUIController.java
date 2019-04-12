@@ -21,7 +21,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
 
 public class KeyGenUIController implements Initializable {
-
+	
 	private MainUIController mainUIController; // Parent controller
 
 	public void setMainUIController(MainUIController mainUIController) {
@@ -59,14 +59,13 @@ public class KeyGenUIController implements Initializable {
 		try {
 			if (privateKeyFile.exists() || publicKeyFile.exists()) {
 				throw new FileAlreadyExistsException(
-						"\"pkey\" or/and \"pubkey\" already exist! Choose a different directory");
+						"\"pkey\" or/and \"pubkey\" already exist! Choose a different directory!");
 			}
 		} catch (Exception e) {
 			mainUIController.setLabelTextFailure(e.getMessage());
 		}
 
 		keyOutputDirectoryLocationField.setText(directory.getAbsolutePath());
-
 	}
 
 	@FXML

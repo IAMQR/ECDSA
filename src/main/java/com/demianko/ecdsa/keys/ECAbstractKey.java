@@ -3,6 +3,7 @@ package com.demianko.ecdsa.keys;
 import com.demianko.ecdsa.curves.ECurve;
 
 public abstract class ECAbstractKey {
+	
 	private ECurve curve;
 	private Object data;
 	

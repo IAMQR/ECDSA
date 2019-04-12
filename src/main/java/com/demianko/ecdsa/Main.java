@@ -25,7 +25,7 @@ public class Main extends Application {
 	public static Map<String, ECurve> getCurves() {
 		return curves;
 	}
-	
+
 	// Add curves here, key should be the same as the curve name in its constructor
 	static {
 		ECurve curve = new P192();
