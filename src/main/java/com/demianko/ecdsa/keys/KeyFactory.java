@@ -7,12 +7,16 @@ import com.demianko.ecdsa.curves.ECurve;
 import com.demianko.ecdsa.operations.CurveOperations;
 
 public class KeyFactory {
-	
+
 	private SecureRandom secureRandom;
-	
+
 	private ECurve curve;
 
 	public KeyFactory(ECurve curve, byte[] seed) {
+		if (curve == null) {
+			throw new IllegalArgumentException("Curve can't be null!");
+		}
+
 		if (seed != null) {
 			secureRandom = new SecureRandom(seed);
 		} else {

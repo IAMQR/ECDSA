@@ -12,8 +12,15 @@ repositories {
 	jcenter()
 }
 
+
 mainClassName = 'com.demianko.ecdsa.Main'
 
+// Create a runnable jar
+jar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+}
 
 // Debug flag
 tasks.withType(JavaExec) {

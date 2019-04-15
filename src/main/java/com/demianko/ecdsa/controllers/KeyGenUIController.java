@@ -21,7 +21,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
 
 public class KeyGenUIController implements Initializable {
-	
+
 	private MainUIController mainUIController; // Parent controller
 
 	public void setMainUIController(MainUIController mainUIController) {
@@ -41,38 +41,37 @@ public class KeyGenUIController implements Initializable {
 	@FXML
 	private Button keyGenButton;
 
-	// FILES TO WORK WITH
-
-	private File privateKeyFile;
-	private File publicKeyFile;
-
 	// HANDLERS
 
 	@FXML
 	private void handleClickOnBrowseButton(MouseEvent mouseEvent) {
-		DirectoryChooser directoryChooser = new DirectoryChooser();
-		File directory = directoryChooser.showDialog(keyOutputDirectoryBrowseButton.getScene().getWindow());
-
-		privateKeyFile = new File(directory.getAbsolutePath(), "pkey");
-		publicKeyFile = new File(directory.getAbsolutePath(), "pubkey");
-
 		try {
-			if (privateKeyFile.exists() || publicKeyFile.exists()) {
-				throw new FileAlreadyExistsException(
-						"\"pkey\" or/and \"pubkey\" already exist! Choose a different directory!");
-			}
-		} catch (Exception e) {
-			mainUIController.setLabelTextFailure(e.getMessage());
+			File selectedDirectory = new DirectoryChooser().showDialog(keyOutputDirectoryBrowseButton.getScene().getWindow());
+			keyOutputDirectoryLocationField.setText(selectedDirectory.getAbsolutePath());
+		} catch (NullPointerException e) { // Do nothing if user doesn't choose a file
 		}
-
-		keyOutputDirectoryLocationField.setText(directory.getAbsolutePath());
 	}
 
 	@FXML
 	private void handleClickOnKeyGenButton(MouseEvent mouseEvent) {
 		try {
+			if (keyOutputDirectoryLocationField.getText().equals("")) {
+				throw new IllegalArgumentException("Path to the output directory can't be empty!");
+			}
+
+			File privateKeyFile = new File(keyOutputDirectoryLocationField.getText(), "pkey");
+			File publicKeyFile = new File(keyOutputDirectoryLocationField.getText(), "pubkey");
+
+			if (privateKeyFile.exists() || publicKeyFile.exists()) {
+				throw new FileAlreadyExistsException(
+						"\"pkey\" or/and \"pubkey\" already exist! Choose a different directory!");
+			}
+
 			ECurve curve = curveSelectionComboBox.getValue();
 			KeyFactory keyFactory = new KeyFactory(curve);
+			
+			mainUIController.setLabelTextInProgress();
+			
 			ECPrivateKey privateKey = keyFactory.generatePrivateKey();
 			ECPublicKey publicKey = keyFactory.generatePublicKey(privateKey);
 

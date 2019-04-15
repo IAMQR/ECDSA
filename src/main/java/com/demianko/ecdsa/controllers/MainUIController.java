@@ -21,7 +21,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 public class MainUIController implements Initializable {
-	
+
 	private Stage keyGenStage; // Stage of the keyGen window
 
 	public void setKeyGenStage(Stage keyGenStage) {
@@ -121,7 +121,7 @@ public class MainUIController implements Initializable {
 
 	@FXML
 	private void handleGenKeysMenuItemAction(ActionEvent actionEvent) {
-		keyGenStage.show(); // Show window
+		keyGenStage.show(); // Show the keygen window
 	}
 
 	@FXML
@@ -132,22 +132,31 @@ public class MainUIController implements Initializable {
 	@FXML
 	private void handleClickOnSignButton(MouseEvent mouseEvent) {
 		try {
+			if (fileToSignLocationField.getText().equals("")) {
+				throw new IllegalArgumentException("Path to the file to sign can't be empty!");
+			}
 			// Load the file to sign from the specified path
 			File fileToSign = new File(fileToSignLocationField.getText());
+
+			if (privateKeyLocationField.getText().equals("")) {
+				throw new IllegalArgumentException("Path to private key to sign can't be empty!");
+			}
 			// Load the private key from the specified path
 			File privateKeyFile = new File(privateKeyLocationField.getText());
 
 			// If not specified, set to the current working directory path
-			if (signatureOutputLocationField.getText().compareTo("") == 0) {
+			if (signatureOutputLocationField.getText().equals("")) {
 				// Default output filename = fileToSign.getName() + ".signature"
 				File tempFile = new File(System.getProperty("user.dir"), fileToSign.getName() + ".signature");
 				if (tempFile.exists()) { // Throw if default output file already exists
 					throw new FileAlreadyExistsException(
-							"File " + tempFile.getCanonicalPath() + " already exists, choose a different one");
+							"File " + tempFile.getCanonicalPath() + " already exists, choose a different one!");
 				}
 				signatureOutputLocationField.setText(tempFile.getAbsolutePath());
 			}
 			File signatureFile = new File(signatureOutputLocationField.getText());
+
+			setLabelTextInProgress();
 
 			CryptOperations.signFile(fileToSign, privateKeyFile, signatureFile);
 			setLabelTextSuccess(String.format("File %s was successfully signed!", fileToSign.getName()));
@@ -159,12 +168,25 @@ public class MainUIController implements Initializable {
 	@FXML
 	private void handleClickOnVerifyButton(MouseEvent mouseEvent) {
 		try {
+			if (fileToVerifyLocationField.getText().equals("")) {
+				throw new IllegalArgumentException("Path to the file to verify can't be empty!");
+			}
 			// Load the file to verify from the specified path
 			File fileToVerify = new File(fileToVerifyLocationField.getText());
+
+			if (publicKeyLocationField.getText().equals("")) {
+				throw new IllegalArgumentException("Path to public key can't be empty!");
+			}
 			// Load the public key from the specified path
 			File publicKeyFile = new File(publicKeyLocationField.getText());
+
+			if (signatureFileLocationField.getText().equals("")) {
+				throw new IllegalArgumentException("Path to the signature can't be empty!");
+			}
 			// Load the signature from the specified path
 			File signatureFile = new File(signatureFileLocationField.getText());
+
+			setLabelTextInProgress();
 
 			if (CryptOperations.verifyFile(fileToVerify, publicKeyFile, signatureFile)) {
 				setLabelTextSuccess(String.format("File %s was successfully verified!", fileToVerify.getName()));
@@ -180,6 +202,11 @@ public class MainUIController implements Initializable {
 
 	private void setDefaultLabelStyle() {
 		statusMessageLabel.setStyle(defaultStatusMessageLabelStyle);
+	}
+
+	// Notify the user about the process of some action
+	void setLabelTextInProgress() {
+		statusMessageLabel.setText("Processing...");
 	}
 
 	void setLabelTextSuccess(String message) { // Message on success

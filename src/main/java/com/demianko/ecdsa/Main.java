@@ -1,5 +1,6 @@
 package com.demianko.ecdsa;
 
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -19,6 +20,13 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+
+	// Optimal dimensions for windows
+	private static final double MAIN_WINDOW_HEIGHT = 430.0;
+	private static final double MAIN_WINDOW_WIDTH = 560.0;
+	
+	private static final double KEY_WINDOW_HEIGHT = 153.0;
+	private static final double KEY_WINDOW_WIDTH = 350.0;
 
 	private static Map<String, ECurve> curves = new LinkedHashMap<>();
 
@@ -41,14 +49,14 @@ public class Main extends Application {
 	}
 
 	@Override
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage primaryStage) throws IOException {
 		// Load the main window
 		FXMLLoader mainWindowLoader = new FXMLLoader(getClass().getClassLoader().getResource("ui_main.fxml"));
 		Parent root = mainWindowLoader.load();
 		Scene scene = new Scene(root);
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("ECDSA");
-		primaryStage.show();
+		setStageSize(primaryStage, MAIN_WINDOW_HEIGHT, MAIN_WINDOW_WIDTH);
 
 		// Load the keyGen window
 		FXMLLoader keyGenWindowLoader = new FXMLLoader(getClass().getClassLoader().getResource("ui_keygen.fxml"));
@@ -56,14 +64,24 @@ public class Main extends Application {
 		Scene keyGenScene = new Scene(keyGenParent);
 		Stage keyGenStage = new Stage();
 		keyGenStage.setScene(keyGenScene);
-
+		// Set the owner window, so that closing the main window closes the key generation menu
+		keyGenStage.initOwner(scene.getWindow());
+		keyGenStage.setTitle("Key generation menu");
+		setStageSize(keyGenStage, KEY_WINDOW_HEIGHT, KEY_WINDOW_WIDTH);
+		
 		mainWindowLoader.<MainUIController>getController().setThisWindow(primaryStage);
 		// Set keyGen stage in the main controller
 		mainWindowLoader.<MainUIController>getController().setKeyGenStage(keyGenStage);
 		// Set a reference to the main controller in the keyGen one
 		keyGenWindowLoader.<KeyGenUIController>getController().setMainUIController(mainWindowLoader.getController());
-
-		keyGenStage.initOwner(scene.getWindow());
-		keyGenStage.setTitle("Key generation menu");
+		
+		primaryStage.show();
+	}
+	
+	private void setStageSize(Stage stage, double height, double width) {
+		stage.setMinHeight(height);
+		stage.setMaxHeight(height);
+		stage.setMinWidth(width);
+		stage.setMaxWidth(width);
 	}
 }
