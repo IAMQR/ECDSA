@@ -28,6 +28,7 @@ public class Main extends Application {
 	private static final double KEY_WINDOW_HEIGHT = 153.0;
 	private static final double KEY_WINDOW_WIDTH = 350.0;
 
+	// Map to store instances of elliptic curves
 	private static Map<String, ECurve> curves = new LinkedHashMap<>();
 
 	public static Map<String, ECurve> getCurves() {
@@ -50,7 +51,7 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws IOException {
-		// Load the main window
+		// Load and configure the main window
 		FXMLLoader mainWindowLoader = new FXMLLoader(getClass().getClassLoader().getResource("ui_main.fxml"));
 		Parent root = mainWindowLoader.load();
 		Scene scene = new Scene(root);
@@ -58,7 +59,7 @@ public class Main extends Application {
 		primaryStage.setTitle("ECDSA");
 		setStageSize(primaryStage, MAIN_WINDOW_HEIGHT, MAIN_WINDOW_WIDTH);
 
-		// Load the keyGen window
+		// Load and configure the keyGen window
 		FXMLLoader keyGenWindowLoader = new FXMLLoader(getClass().getClassLoader().getResource("ui_keygen.fxml"));
 		Parent keyGenParent = keyGenWindowLoader.load();
 		Scene keyGenScene = new Scene(keyGenParent);
@@ -69,12 +70,14 @@ public class Main extends Application {
 		keyGenStage.setTitle("Key generation menu");
 		setStageSize(keyGenStage, KEY_WINDOW_HEIGHT, KEY_WINDOW_WIDTH);
 		
+		// Set a reference to the window corresponding to its constructor
 		mainWindowLoader.<MainUIController>getController().setThisWindow(primaryStage);
 		// Set keyGen stage in the main controller
 		mainWindowLoader.<MainUIController>getController().setKeyGenStage(keyGenStage);
 		// Set a reference to the main controller in the keyGen one
 		keyGenWindowLoader.<KeyGenUIController>getController().setMainUIController(mainWindowLoader.getController());
 		
+		// Show the stage
 		primaryStage.show();
 	}
 	

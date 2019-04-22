@@ -46,7 +46,8 @@ public class KeyGenUIController implements Initializable {
 	@FXML
 	private void handleClickOnBrowseButton(MouseEvent mouseEvent) {
 		try {
-			File selectedDirectory = new DirectoryChooser().showDialog(keyOutputDirectoryBrowseButton.getScene().getWindow());
+			File selectedDirectory = new DirectoryChooser()
+					.showDialog(keyOutputDirectoryBrowseButton.getScene().getWindow());
 			keyOutputDirectoryLocationField.setText(selectedDirectory.getAbsolutePath());
 		} catch (NullPointerException e) { // Do nothing if user doesn't choose a file
 		}
@@ -55,10 +56,12 @@ public class KeyGenUIController implements Initializable {
 	@FXML
 	private void handleClickOnKeyGenButton(MouseEvent mouseEvent) {
 		try {
+			// Throw an exception if the path is empty
 			if (keyOutputDirectoryLocationField.getText().equals("")) {
 				throw new IllegalArgumentException("Path to the output directory can't be empty!");
 			}
 
+			// Load files with keys
 			File privateKeyFile = new File(keyOutputDirectoryLocationField.getText(), "pkey");
 			File publicKeyFile = new File(keyOutputDirectoryLocationField.getText(), "pubkey");
 
@@ -67,14 +70,16 @@ public class KeyGenUIController implements Initializable {
 						"\"pkey\" or/and \"pubkey\" already exist! Choose a different directory!");
 			}
 
+			mainUIController.setLabelTextInProgress();
+
 			ECurve curve = curveSelectionComboBox.getValue();
 			KeyFactory keyFactory = new KeyFactory(curve);
-			
-			mainUIController.setLabelTextInProgress();
-			
+
+			// Generate keys
 			ECPrivateKey privateKey = keyFactory.generatePrivateKey();
 			ECPublicKey publicKey = keyFactory.generatePublicKey(privateKey);
 
+			// Write keys
 			FileOperations.writePrivateKey(privateKey, privateKeyFile);
 			FileOperations.writePublicKey(publicKey, publicKeyFile);
 			mainUIController.setLabelTextSuccess("Keys were succesfully generated!");
@@ -85,7 +90,7 @@ public class KeyGenUIController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// Add curves
+		// Add curves from the map in Main
 		curveSelectionComboBox.getItems().addAll(Main.getCurves().values());
 	}
 }

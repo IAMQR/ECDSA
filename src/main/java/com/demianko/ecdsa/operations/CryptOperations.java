@@ -17,6 +17,7 @@ public class CryptOperations {
 	private CryptOperations() {
 	}
 
+	// Throws an exception if something went wrong
 	public static void signFile(File fileToSign, File privateKeyFile, File signatureOutputFile)
 			throws IOException, NoSuchAlgorithmException {
 		ECPrivateKey privateKey = FileOperations.readPrivateKey(privateKeyFile);
@@ -45,6 +46,8 @@ public class CryptOperations {
 		FileOperations.writeSignature(r, s, signatureOutputFile);
 	}
 
+	// Returns false if verification is unsuccessful
+	// Throws an exception if something went wrong
 	public static boolean verifyFile(File fileToVerify, File publicKeyFile, File signatureFile)
 			throws IOException, NoSuchAlgorithmException {
 		ECPublicKey publicKey = FileOperations.readPublicKey(publicKeyFile);

@@ -121,7 +121,7 @@ public class MainUIController implements Initializable {
 
 	@FXML
 	private void handleGenKeysMenuItemAction(ActionEvent actionEvent) {
-		keyGenStage.show(); // Show the keygen window
+		keyGenStage.show(); // Show the key generation window
 	}
 
 	@FXML
