@@ -25,8 +25,9 @@ public class ECPoint {
 			return false;
 		}
 
-		return x.equals(((ECPoint) pt).getX()) && y.equals(((ECPoint) pt).getY())
-				&& infinity == ((ECPoint) pt).infinity;
+		ECPoint point = (ECPoint) pt;
+
+		return infinity == point.infinity && x.equals(point.getX()) && y.equals(point.getY());
 	}
 
 	public BigInteger getX() {

@@ -38,18 +38,38 @@ public class CurveOperations {
 
 	// Point multiplication
 	public static ECPoint multiplyPoint(ECurve curve, BigInteger s, ECPoint p) {
-		String binS = s.toString(2);
+		String[] naf = computeNAF(s);
 
-		if (binS.length() < 1 || s.compareTo(BigInteger.ZERO) < 1) {
-			throw new IllegalArgumentException("Argument must be greater than zero!");
-		}
-
-		ECPoint result = p;
-		for (int i = 1; i < binS.length(); i++) {
-			result = addPoints(curve, result, result);
-			if (binS.substring(i, i + 1).equals("1")) {
-				result = addPoints(curve, result, p);
+		ECPoint q = new ECPoint(true);
+		for (int i = 0; i < naf.length; i++) {
+			if (naf[i] == null) {
+				continue;
 			}
+			q = addPoints(curve, q, q);
+			if (naf[i].equals("1")) {
+				q = addPoints(curve, q, p);
+			} else if (naf[i].equals("-1")) {
+				q = addPoints(curve, q, new ECPoint(p.getX(), p.getY().negate().mod(curve.getP())));
+			}
+		}
+		return q;
+	}
+	
+	private static String[] computeNAF(BigInteger k) {
+		String[] result = new String[k.bitLength() + 1];
+
+		int i = 0;
+
+		while (k.compareTo(BigInteger.ZERO) > 0) {
+			if (k.testBit(0)) {
+				BigInteger t = BigInteger.TWO.subtract(k.mod(BigInteger.valueOf(4)));
+				result[result.length - (i + 1)] = t.toString();
+				k = k.subtract(t);
+			} else {
+				result[result.length - (i + 1)] = "0";
+			}
+			k = k.divide(BigInteger.TWO);
+			i++;
 		}
 
 		return result;
