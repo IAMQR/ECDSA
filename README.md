@@ -1,7 +1,7 @@
 ECDSA
 -------------------------------------------------------------------------------
 
-This project is a basic implementation of the Elliptic Curve Digital Signature Algorithm(ECDSA) which uses NIST-recommended curves over the prime field *GF(p)*. Main features of the program are: *Key generation*, *file signature generation* and *verification*.
+This project is a basic implementation of the Elliptic Curve Digital Signature Algorithm(ECDSA) which uses NIST-recommended curves over the prime field *GF(p)*. Main features of the program are: *Key generation*, *file signature generation* and *verification*. **This software has been created as a training exercise and is probably unsafe. Never use it as a substitute for real encryption software!**
 ### Supported curves:
 * *P-192*
 * *P-224*
